@@ -445,5 +445,342 @@ namespace Algorithms
             Console.Write($"count: {maxLength}");
         }
 
+        /// <summary>
+        /// finds the most frequently occurring element in an array.
+        /// </summary>
+        public void Duplicates()
+        {
+            int[] arr = new int[] { 1, 1, 1, 4, 2, 3, 4, 4, 1, 2, 4, 9, 9, 9, 9 };
+            List<List<int>> duplicates = new List<List<int>>();
+
+            for (int i = 0; i < arr.Length; i++)
+            {
+                duplicates.Add(new List<int>());
+                for (int j = i + 1; j < arr.Length; j++)
+                {
+                    if (arr[i] > arr[j])
+                    {
+                        int temp = arr[i];
+                        arr[i] = arr[j];
+                        arr[j] = temp;
+                    }
+                }
+            }
+
+            int dIndex = 0;
+            int count = 1;
+            int increaser = 0;
+            for (int i = 0; i < arr.Length; i++)
+            {
+                if (i != arr.Length - 2)
+                {
+                    if (arr[i] == arr[i + 1])
+                    {
+                        if (increaser == 0)
+                        {
+                            duplicates[dIndex].Add(arr[i]);
+                            increaser++;
+                        }
+                        duplicates[dIndex].Add(arr[i + 1]);
+                        increaser++;
+
+                        count++;
+                    }
+                    else if (arr[i + 1] == arr[i + 2])
+                    {
+                        Console.WriteLine(count);
+                        count = 1;
+                        increaser = 0;
+                        dIndex++;
+                    }
+                    else
+                    {
+                        dIndex++;
+                        increaser = 0;
+                        duplicates[dIndex].Add(arr[i + 1]);
+                        increaser++;
+                    }
+
+                }
+                else
+                {
+                    if (arr[i] == arr[i + 1])
+                    {
+                        if (increaser == 0)
+                        {
+                            duplicates[dIndex].Add(arr[i]);
+                            increaser++;
+                        }
+
+                        duplicates[dIndex].Add(arr[i + 1]);
+                        increaser++;
+                        count++;
+                        break;
+                    }
+                    else
+                    {
+                        increaser = 0;
+                        duplicates[++dIndex].Add(arr[i + 1]);
+                        increaser++;
+                        break;
+                    }
+                }
+            }
+            int max = 0;
+            int pos = 0;
+            for (int i = duplicates.Count - 1; i >= 0; i--)
+            {
+                if (duplicates[i].Count == 0)
+                {
+                    duplicates.Remove(duplicates[i]);
+                }
+            }
+
+            for (int i = 0; i < duplicates[dIndex].Count; i++)
+            {
+                if (duplicates[i].Count > max)
+                {
+                    max = duplicates[i].Count;
+                    pos = i;
+                }
+            }
+            Console.Write($"Best ");
+            for (int i = 0; i < duplicates[pos].Count; i++)
+            {
+                Console.Write($"{duplicates[pos][i]} ");
+            }
+            Console.Write($"count: {max}");
+        }
+
+        public void SquareMatrix()
+        {
+            Console.Write("enter dimension count: ");
+            int dimension = int.Parse(Console.ReadLine());
+            int[,] arr = new int[dimension, dimension];
+
+            int temp = 1;
+            for (int i = 1; i < arr.GetLength(0); i++)
+            {
+                for (int j = i; j <= (dimension - 1) * (dimension - 1); j += dimension - 1)
+                {
+                    Console.Write($"{j}  ");
+                    temp = j;
+                }
+                Console.WriteLine();
+            }
+        }
+
+        public void SquareMatrix2()
+        {
+            Console.Write("enter dimension count: ");
+            int dimension = int.Parse(Console.ReadLine());
+            int[,] matrix = new int[dimension, dimension];
+
+            int rows = 0;
+            int cols = 0;
+            int move = 1;
+            for (int i = 1; i <= matrix.Length; i++)
+            {
+                if (move == 1)
+                {
+                    if (rows < dimension - 1)
+                    {
+                        matrix[rows, cols] = i;
+                        rows++;
+                    }
+                    else
+                    {
+                        move = move >= 4 ? 1 : move + 1;
+                    }
+                }
+                if (move == 2)
+                {
+                    matrix[rows, cols] = i;
+                    cols++;
+                    if (i != matrix.Length)
+                    {
+                        move = move >= 4 ? 1 : move + 1;
+                        i++;
+                    }
+                }
+                if (move == 3)
+                {
+                    if (rows > 0)
+                    {
+                        matrix[rows, cols] = i;
+                        rows--;
+                    }
+                    else
+                    {
+                        move = move >= 4 ? 1 : move + 1;
+                    }
+                }
+
+                if (move == 4)
+                {
+                    matrix[rows, cols] = i;
+                    cols++;
+                    move = move >= 4 ? 1 : move + 1;
+                }
+            }
+
+            for (int i = 0; i < matrix.GetLength(0); i++)
+            {
+                for (int j = 0; j < matrix.GetLength(1); j++)
+                {
+                    Console.Write($"{matrix[i, j]}   ");
+                }
+                Console.WriteLine();
+            }
+        }
+
+        public void SquareMatrix3()
+        {
+            Console.Write("enter dimension count: ");
+            int dimension = int.Parse(Console.ReadLine());
+            int[,] matrix = new int[dimension, dimension];
+
+            int rows = dimension - 1;
+            int cols = 0;
+            int count = 1;
+            bool accepted = false;
+            int counter = 2;
+            for (int i = 1; i <= matrix.Length; i++)
+            {
+                if (rows == dimension - 1)
+                {
+                    if (rows <= dimension - 1 && cols <= dimension - 1)
+                    {
+                        matrix[rows, cols] = i;
+                    }
+                    if (count >= dimension)
+                    {
+                        rows = 0;
+                        cols = 1;
+                        accepted = true;
+                    }
+                    else if (accepted)
+                    {
+                        rows = 0;
+                        cols = count++;
+                        matrix[rows, cols] = i;
+                        cols++;
+                    }
+                    else
+                    {
+                        rows -= count++;
+                        cols = 0;
+                    }
+                }
+                else if (cols == dimension - 1 && accepted)
+                {
+                    matrix[rows, cols] = i;
+                    rows = 0;
+                    cols = counter++;
+                }
+                else
+                {
+                    matrix[rows, cols] = i;
+                    cols++;
+                    rows++;
+                }
+            }
+
+            for (int i = 0; i < matrix.GetLength(0); i++)
+            {
+                for (int j = 0; j < matrix.GetLength(1); j++)
+                {
+                    Console.Write($"{matrix[i, j]}\t");
+                }
+                Console.WriteLine();
+            }
+        }
+
+        public void SquareMatrix4()
+        {
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.Write("enter dimension count: ");
+            int dimension = int.Parse(Console.ReadLine());
+            int[,] matrix = new int[dimension, dimension];
+
+            string move = "down";
+            int rows = 0;
+            int cols = 0;
+            int counter = dimension - 1;
+
+            for (int i = 1; i <= matrix.Length; i++)
+            {
+                if (move == "down")
+                {
+                    if (rows < dimension - 1 && matrix[rows + 1, cols] == 0)
+                    {
+                        matrix[rows, cols] = i;
+                        rows++;
+                    }
+                    else
+                    {
+                        matrix[rows, cols] = i++;
+                        if (i >= matrix.Length)
+                        {
+                            break;
+                        }
+                        move = "right";
+                        cols++;
+
+                    }
+                }
+                if (move == "right")
+                {
+                    if (cols < dimension - 1 && matrix[rows, cols + 1] == 0)
+                    {
+                        matrix[rows, cols] = i;
+                        cols++;
+
+                    }
+                    else
+                    {
+                        matrix[rows, cols] = i++;
+                        move = "up";
+                        rows--;
+
+                    }
+                }
+                if (move == "up")
+                {
+                    if (rows > 0 && matrix[rows - 1, cols] == 0)
+                    {
+                        matrix[rows, cols] = i;
+                        rows--;
+                    }
+                    else
+                    {
+                        move = "left";
+                    }
+                }
+                if (move == "left")
+                {
+                    if (cols > 0 && matrix[rows, cols - 1] == 0)
+                    {
+                        matrix[rows, cols] = i;
+                        cols--;
+                    }
+                    else
+                    {
+                        matrix[rows, cols] = i;
+                        rows++;
+                        move = "down";
+                    }
+                }
+            }
+
+            for (int i = 0; i < matrix.GetLength(0); i++)
+            {
+                for (int j = 0; j < matrix.GetLength(1); j++)
+                {
+                    Console.Write($"{matrix[i, j]}\t");
+                }
+                Console.WriteLine();
+            }
+        }
     }
 }
